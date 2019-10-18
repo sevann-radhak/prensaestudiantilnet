@@ -1,0 +1,45 @@
+﻿@model PrensaEstudiantil.Models.YoutubeVideo
+
+@{
+    ViewBag.Title = ("Eliminar " + @Html.DisplayFor(model => model.Name));
+}
+
+<div class="col-md-12" style="background-color:inherit">
+    <div class="row col-md-12" style="text-align: center">
+        <h1>Sistema de Gestión de Publicaciones</h1>
+        <h4 class="green-color"><b>¿Estás seguro de que deseas eliminar este video?</b></h4>
+        <hr />
+    </div>
+
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt>
+                Video
+            </dt>
+
+            <dd>
+                <iframe src="https://www.youtube.com/embed/@Html.DisplayFor(model => model.URL)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </dd>
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color" style="text-align: center">
+                <a href="#" onClick="history.back();" class="btn btn-default"> Cancelar </a>
+                <input type="submit" value="Eliminar" class="btn btn-danger" style="margin-left: 50px" />
+            </div>
+        }
+    </div>
+
+    <br clear="all" />
+</div>

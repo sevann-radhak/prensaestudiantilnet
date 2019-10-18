@@ -1,0 +1,42 @@
+﻿@model IEnumerable<PrensaEstudiantil.Models.Publication>
+
+@{
+    /**/
+
+    ViewBag.Title = "Opinión - Prensa Estudiantil";
+}
+<div class="mt-20 pt-20">
+    <br clear="all" />
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4" style="margin-top: 6px; float: left;">
+            <div style="border: 1px solid #D8D8D8; border-radius: 10px; padding: 10px;">
+                <div class="card-title">
+                    <h4 style="font-weight: bold;">@Html.ActionLink((item.Title), "Details", new { id = item.ID }, new { @class = "green-color" })</h4>
+                    <small class="text-muted" style="font-size: x-small">@Html.DisplayFor(modelItem => item.Date)</small>
+                </div>
+
+                <div class="car-body">
+                    <img class="card-img"
+                         src="@Html.DisplayFor(modelItem => item.ImagePath)"
+                         style="margin-top: 5px; width: 100%;"
+                         alt='@item.Title'
+                         title='@item.Title' />
+
+                    <span class="green-color" style="font-weight: bold; float: right">@Html.DisplayFor(modelItem => item.Author)</span>
+
+                    <br clear="all" />
+
+                    <p class="card-text" style="text-align: justify">
+                        @Html.DisplayFor(modelItem => item.Header)
+                        @Html.ActionLink("[+]", "Details", new { id = item.ID }, new { @class = "green-color" })
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+    <br clear="all" />
+</div>
+
+<br clear="all" />

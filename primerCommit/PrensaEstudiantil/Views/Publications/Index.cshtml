@@ -1,0 +1,106 @@
+﻿@model IEnumerable<PrensaEstudiantil.Models.Publication>
+
+@{
+    ViewBag.Title = "Prensa Estudiantil";
+}
+
+@Html.ActionLink("Administrador", "Admin", null, new { @class = "btn btn-primary" })
+
+
+<div class="mt-20 pt-20">
+    <div class="col-md-9">
+
+        @*List publication with category "Opinion" (CategoryID = 4)*@
+        <div class="col-md-3" style="float: left;">
+            <div class="green-background" style="padding: 5px 0px 5px 16px;">
+                <span style="font-weight: bold; color:white; letter-spacing: 1pt;">OPINIÓN</span>
+            </div>
+
+            <div class="col-md-12" style="border: 1px solid #79C655;">
+                @foreach (var columna in @ViewBag.Columnas)
+                {
+                    <a href="Publications/Details/@columna.ID" class="black-color">
+                        <div class="mt-20">
+                            <span style="font-weight: bold;">@columna.Title</span>
+                            <img class="card-img"
+                                 src="@columna.ImagePath"
+                                 style="margin-top: 5px; width: 100%;"
+                                 alt='@columna.Title'
+                                 title='@columna.Title' />
+                        </div>
+                    </a>
+                    <span style="font-size: 9px;">Por: </span> <span class="green-color" style="font-size: 8px; font-weight: bold;"> @columna.Author</span>
+
+                    <hr style="border:1px solid #79C655;">
+                }
+
+                    <div style="text-align: right">
+                        <a href="Publications/Opinion" class="green-color">
+                            Ver más
+                            <span class='glyphicon glyphicon-arrow-right'></span>
+                        </a>
+                    </div>
+            </div>
+        </div>
+
+        @*Variables*@
+        @{
+            int i = 0;
+            string divClass = "col-md-6";
+        }
+
+        @*List publications in main page*@
+        @foreach (var item in Model)
+        {
+            i++;
+
+            if (i == 1)
+            {
+                divClass = "col-md-9";
+            }
+            else
+            {
+                divClass = "col-md-6";
+            }
+
+            <div class="@divClass" style="margin-top: 6px; float: right">
+                <div style="border: 1px solid #D8D8D8; border-radius: 10px; padding: 10px;">
+                    <div class="card-title">
+                        <h4 style="font-weight: bold;">@Html.ActionLink((item.Title), "Details", new { id = item.ID }, new { @class = "green-color" })</h4>
+                        <span class="badge badge-secondary">@Html.DisplayFor(modelItem => item.Category.Description)</span>
+                        <small class="text-muted" style="font-size: x-small">@Html.DisplayFor(modelItem => item.Date)</small>
+                    </div>
+
+                    <div class="car-body">
+                        <img class="card-img"
+                             src="@Html.DisplayFor(modelItem => item.ImagePath)"
+                             style="margin-top: 5px; width: 100%;"
+                             alt='@item.Title'
+                             title='@item.Title' />
+
+                        <p class="card-text" style="text-align: justify">
+                            @Html.DisplayFor(modelItem => item.Header)
+                            @Html.ActionLink("[+]", "Details", new { id = item.ID }, new { @class = "green-color" })
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @*List videos in main page*@
+    <div class="col-md-3" style="border-left: 1px solid #D8D8D8;">
+        @foreach (var video in @ViewBag.Videos)
+        {
+            <div class="mt-20">
+                <a href="https://www.youtube.com/watch?v=@video.URL" target="_blank" class=" black-color" style="text-decoration: underline">@video.Name</a>
+
+                <div class="h_iframe">
+                    <iframe name="myFrame" id="myFrame" src="https://www.youtube.com/embed/@video.URL" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        }
+    </div>
+
+    <br clear="all" />
+</div>

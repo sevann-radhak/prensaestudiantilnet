@@ -1,0 +1,172 @@
+﻿@model IEnumerable<PrensaEstudiantil.Models.PublicationImage>
+
+@{
+    ViewBag.Title = "Imágenes " + @Session["CurrentPublicationTitle"].ToString();
+
+    //ViewBag.Title = "Imágenes ";
+}
+@*@Session["CurrentPublicationId"].ToString()
+    @Session["CurrentPublicationTitle"].ToString()*@
+@*@ViewBag.Message*@
+
+<div class="col-md-12" style="background-color: inherit">
+    <div class="row col-md-12" style="text-align: center">
+        <h1>Sistema de Gestión de Publicaciones</h1>
+        <h4 class="green-color"><b>Editar Imágenes de Publicación</b></h4>
+        <hr />
+    </div>
+
+    <br clear="all" />
+
+    <div>
+        <div style="float: left">
+            <h4 class="green-color"><a href="/Publications/Details/@Session["CurrentPublicationId"].ToString()" target="_blank" style="text-decoration: underline" class="green-color">@Session["CurrentPublicationTitle"].ToString()</a></h4>
+        </div>
+
+        <div style="float: right">
+            <button id="addImage" class="btn btn-success"> Agregar Imagen </button>
+        </div>
+    </div>
+
+    <br clear="all" />
+
+    <div class="mt-20" style="background-color: #C5EADB; padding: 10px; border: 1px solid #1b4a37; border-radius: 5px;">
+        <table id="principalImage">
+            <caption>Imagen Principal</caption>
+            <thead>
+                <tr class="hidden">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 20%">
+                        <img src="@ViewBag.CurrentPublication.ImagePath"
+                             style="max-width:90%;min-width: 150px; overflow:hidden;border-radius: 5%;"
+                             alt='@ViewBag.CurrentPublication.ImageDescription'
+                             title='@ViewBag.CurrentPublication.ImageDescription' />
+                    </td>
+                    <td style="width: 65%">@ViewBag.CurrentPublication.ImageDescription</td>
+                    <td style="width: 15%">@*@Html.ActionLink("Edit", "Edit", new { id = item.PublicationImagenID })*@ <button id="changePrincipalImage" class="btn btn-success"> Cambiar </button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @{var i = 0;}
+    @foreach (var item in Model)
+    {
+        i++;
+    }
+
+    @if (i > 0)
+    {
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr id="@item.PublicationImagenID">
+                    <td style="width: 20%">
+                        <img src="@Html.DisplayFor(modelItem => item.ImagePath)"
+                             @*style="width:90%;width:auto;height:auto; overflow:hidden;border-radius: 5%;"*@
+                             style="width:100px;"
+                             alt='@Html.DisplayFor(modelItem => item.Description)'
+                             title='@Html.DisplayFor(modelItem => item.Description)' />
+                    </td>
+                    <td style="width: 65%">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td style="width: 15%">
+                        @*@Html.ActionLink("Edit", "Edit", new { id = item.PublicationImagenID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.PublicationImagenID }) |*@
+                        @Html.ActionLink("Eliminar", "Delete", new { id = item.PublicationImagenID, imagePath = item.ImagePath }, new { @class = "btn btn-danger" })
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+
+    <br clear="all" />
+    <br clear="all" />
+
+    <div id="changePrincipalImage-modal" class="modal fade">
+        <div class="modal-dialog" style="width: 40%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4>Modificar la Imagen principal de la Publicación</h4>
+                </div>
+
+                @using (Html.BeginForm("ChangePrincipalImage", "PublicationImages", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="col-md-12">
+                        @Html.AntiForgeryToken()
+
+                        <input class="form-control col-md-4 mr-40 mt-10" type="file" name="ImageFile" accept="image/*" required />
+                        <input class="hidden" type="text" name="ImagePath" value="@ViewBag.CurrentPublication.ImagePath" />
+                        <input class="hidden" type="text" name="ID" style="min-width: 50%" value='@Session["CurrentPublicationId"].ToString()' />
+
+                        <br clear="all" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="submit" id="changePrincipalImage-modal-save" value="Cambiar" class="btn btn-success" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div id="addImage-modal" class="modal fade">
+        <div class="modal-dialog" style="width: 70%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4>Agregar Imagen a la Publicación</h4>
+                </div>
+
+                @using (Html.BeginForm("Create", "PublicationImages", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="col-md-12">
+                        @Html.AntiForgeryToken()
+
+                        <input class="form-control col-md-4 mr-40 mt-10" type="file" name="ImageFile" accept="image/*" required />
+                        <input class="form-control col-md-8 mt-10" type="text" name="Description" style="min-width: 50%" placeholder="Descripción de la Imagen" />
+                        <input class="hidden" type="text" name="ID" style="min-width: 50%" value='@Session["CurrentPublicationId"].ToString()' />
+
+                        <br clear="all" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="submit" id="addImage-modal-save" value="Agregar" class="btn btn-success" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#addImage').click(function () {
+                $("#addImage-modal").modal('show');
+            });
+        });
+
+        $(document).ready(function () {
+            $('#changePrincipalImage').click(function () {
+                $("#changePrincipalImage-modal").modal('show');
+            });
+        });
+    </script>
+}

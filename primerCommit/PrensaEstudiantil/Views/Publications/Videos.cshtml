@@ -1,0 +1,29 @@
+﻿@model IEnumerable<PrensaEstudiantil.Models.YoutubeVideo>
+
+@{
+    ViewBag.Title = "Videos Prensa Estudiantil";
+}
+
+<div class="col-md-12" style="background-color: inherit">
+    <div class="row col-md-12" style="text-align: center">
+        <h1>Videos Prensa Estudiantil</h1>
+        <h5 class="green-color"><b>Todos los videos son propiedad de la compañía respectiva</b></h5>
+        <hr />
+    </div>
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4" style="margin-top: 6px; float: left;">
+            <div style="border: 1px solid #D8D8D8; border-radius: 10px; padding: 10px;">
+                <div class="card-title">
+                    <h4 style="font-weight: bold;">@Html.DisplayFor(modelItem => item.Name) </h4>
+                </div>
+
+                <div class="car-body">
+                    <iframe src="https://www.youtube.com/embed/@Html.DisplayFor(modelItem => item.URL)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
