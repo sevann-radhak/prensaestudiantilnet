@@ -145,7 +145,8 @@ namespace PrensaEstudiantil.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        //[AllowAnonymous]
+        [Authorize(Users = "sevann.radhak@gmail.com")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
@@ -392,7 +393,7 @@ namespace PrensaEstudiantil.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Publications");
         }
 
         //
@@ -449,7 +450,7 @@ namespace PrensaEstudiantil.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Publications");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

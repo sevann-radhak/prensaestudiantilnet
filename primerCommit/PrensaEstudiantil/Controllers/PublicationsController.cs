@@ -22,13 +22,14 @@ namespace PrensaEstudiantil.Controllers
             //var publications = db.Publications.OrderByDescending(x => x.Date).Take(10);
             var publications = db.Publications.Where(x => x.CategoryID == 1).OrderByDescending(x => x.Date).Take(21);
             var videos = db.YoutubeVideos.OrderByDescending(x => x.YoutubeVideoID).Take(5).ToList();
-            var columnas = db.Publications.Where(x => x.CategoryID == 4).OrderByDescending(x => x.Date).Take(3).ToList();
+            var columnas = db.Publications.Where(x => x.CategoryID == 2).OrderByDescending(x => x.Date).Take(3).ToList();
 
             List<YoutubeVideo> videosArray = videos;
             List<Publication> columnasArray = columnas;
 
             ViewBag.Videos = videosArray;
             ViewBag.Columnas = columnasArray;
+            ViewBag.ColumnasLength = columnasArray.Count;
 
             return View(publications.ToList());
         }
@@ -57,6 +58,7 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // GET: Publications/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "Description");
@@ -68,6 +70,7 @@ namespace PrensaEstudiantil.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "ID,Title,Header,Body,Footer,Date,LastUpdate,Author,ImageDescription,CategoryID")] Publication publication, HttpPostedFileBase ImageFile)
         {
             if (ModelState.IsValid)
@@ -93,10 +96,11 @@ namespace PrensaEstudiantil.Controllers
                         // Save the image in server
                         ImageFile.SaveAs(fileName);
 
-                        // Set null value for publications different of Opinion Category (CategoryID = 4) 
-                        if (publication.CategoryID == 4)
+                        // Set null value for publications different of Opinion Category (CategoryID = 2) 
+                        if (publication.CategoryID == 2)
                         {
                             publication.Author = publication.Author.ToUpper();
+                            publication.ImageDescription = null;
                         }
                         else
                         {
@@ -130,6 +134,7 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // GET: Publications/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -154,6 +159,7 @@ namespace PrensaEstudiantil.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "ID,Title,Header,Body,Footer,Date,ImagePath,ImageDescription,Author,LastUpdate,CategoryID")] Publication publication)
         {
             if (ModelState.IsValid)
@@ -161,8 +167,8 @@ namespace PrensaEstudiantil.Controllers
                 // Set the current date and time for Update Date
                 publication.LastUpdate = DateTime.Now;
 
-                // Set null value for publications different of Opinion Category (CategoryID = 4) 
-                if (publication.CategoryID == 4)
+                // Set null value for publications different of Opinion Category (CategoryID = 2) 
+                if (publication.CategoryID == 2)
                 {
                     publication.Author = publication.Author.ToUpper();
                 }
@@ -183,6 +189,7 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // GET: Publications/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -200,55 +207,70 @@ namespace PrensaEstudiantil.Controllers
         // POST: Publications/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Publication publication = db.Publications.Find(id);
             db.Publications.Remove(publication);
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Admin");
         }
 
         // Publications for admin view
+        [Authorize(Roles = "Admin")]
         public ActionResult Admin()
         {
-            var publications = db.Publications.OrderByDescending(x => x.Date).Take(20);
+            var publications = db.Publications.OrderByDescending(x => x.Date).Take(20).ToList();
 
-            return View(publications.ToList());
+            ViewBag.AdminLength = publications.Count;
+
+            return View(publications);
         }
 
         // Publications of Opinion Category (CategoryID = 4)
         public ActionResult Opinion()
         {
-            var publications = db.Publications.Where(x => x.CategoryID == 4).OrderByDescending(x => x.Date).Take(21);
+            var publications = db.Publications.Where(x => x.CategoryID == 2).OrderByDescending(x => x.Date).Take(21).ToList();
 
-            return View(publications.ToList());
+            ViewBag.OpinionLength = publications.Count;
+
+            return View(publications);
         }
 
         // Publications of Biosociedad Category
         public ActionResult Biosociedad()
         {
-            var publications = db.Publications.Where(x => x.CategoryID == 3).OrderByDescending(x => x.Date).Take(21);
+            var publications = db.Publications.Where(x => x.CategoryID == 4).OrderByDescending(x => x.Date).Take(21).ToList();
+            
+            ViewBag.BiosociedadLength = publications.Count;
 
-            return View(publications.ToList());
+            return View(publications);
         }
 
         // Publications of Social Category 
+        [AllowAnonymous]
         public ActionResult Social()
         {
-            var publications = db.Publications.Where(x => x.CategoryID == 5).OrderByDescending(x => x.Date).Take(21);
+            var publications = db.Publications.Where(x => x.CategoryID == 3).OrderByDescending(x => x.Date).Take(21).ToList();
 
-            return View(publications.ToList());
+            ViewBag.SocialLength = publications.Count;
+
+            return View(publications);
         }
-        
+
         // GET: Videos
         public ActionResult Videos()
         {
             var videos = db.YoutubeVideos.OrderByDescending(x => x.YoutubeVideoID).Take(21).ToList();
 
+            ViewBag.VideosLength = videos.Count;
+
             return View(videos);
         }
 
         // Add images to publication at creating moment
+        [Authorize(Roles = "Admin")]
         public ActionResult AddImage(PublicationImage publicationImage)
         {
             return View(publicationImage);

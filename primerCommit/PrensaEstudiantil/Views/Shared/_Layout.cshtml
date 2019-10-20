@@ -50,6 +50,14 @@
             margin-top: 40px;
         }
 
+        .mb-20{
+            margin-bottom: 20px;
+        }
+
+        .ml-10 {
+            margin-left: 10px;
+        }
+
         .ml-20 {
             margin-left: 20px;
         }
@@ -84,11 +92,13 @@
 </head>
 
 <body>
-    <div style="background-color: #E4E4E4">
-        <div class="navbar navbar-inverse">
-            <div class="col-md-12" style="background-color: white; display: flex; justify-content: center; align-items: center;">
+    <div style="background-color: #E4E4E4;">
+        <div class="navbar navbar-inverse" style="margin-bottom: 0px;">
+            <div class="col-md-12 navbar navbar-inverse" style="margin-bottom: 0px; padding: 5px; background-color: white; display: flex; justify-content: center; align-items: center;">
                 <div class="col-md-8" style="float: left;">
-                    <img src="~/Content/Images/resources/header_image.jpg" style="max-width:100%;width:auto;height:auto; overflow:hidden;" />
+                    <a href="/">
+                        <img src="~/Content/Images/resources/header_image.jpg" style="max-width:100%;width:auto;height:auto; overflow:hidden;" />
+                    </a>
                 </div>
 
                 <div class="col-md-4" style="float: right; text-align: right">
@@ -140,7 +150,7 @@
             </div>
         </div>
         <div class="container body-content">
-            <div style="background-color: white;">
+            <div style="background-color: white;"> 
                 <div style="background-color: inherit">
                     @RenderBody()
                 </div>

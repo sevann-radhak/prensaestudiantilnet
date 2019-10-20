@@ -11,6 +11,7 @@ using PrensaEstudiantil.Models;
 
 namespace PrensaEstudiantil.Controllers
 {
+    [Authorize]
     public class YoutubeVideosController : Controller
     {
         private PrensaContext db = new PrensaContext();
@@ -18,7 +19,9 @@ namespace PrensaEstudiantil.Controllers
         // GET: YoutubeVideos
         public ActionResult Index()
         {
-            var videos = db.YoutubeVideos.ToList().OrderByDescending(x => x.YoutubeVideoID);
+            var videos = db.YoutubeVideos.OrderByDescending(x => x.YoutubeVideoID).ToList();
+
+            ViewBag.VideosLength = videos.Count;
 
             return View(videos);
         }

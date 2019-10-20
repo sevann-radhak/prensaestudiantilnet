@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PrensaEstudiantil.Models.Publication>
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<PrensaEstudiantil.Models.Publication>
 
 @{
     ViewBag.Title = "Admin";
@@ -14,7 +15,15 @@
     <div style="width: 100%">
         <div style="float: left;">
             @Html.ActionLink("Videos", "Index", "YoutubeVideos", new { }, new { @class = "btn btn-primary" })
-            @Html.ActionLink("Categorías", "Index", "Categories", new { }, new { @class = "btn btn-warning" })
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Categorías", "Index", "Categories", new { }, new { @class = "btn btn-warning", style = "margin-left: 5px;" })
+
+                if (User.Identity.GetUserName() == "sevann.radhak@gmail.com")
+                {
+                    @Html.ActionLink("Usuarios", "Index", "Users", new { }, new { @class = "btn btn-info ml-10" })
+                }
+            }
         </div>
 
         <div style="float: right;">
@@ -23,57 +32,69 @@
 
         <p> <br clear="all" /> </p>
     </div>
-    
-    <table class="table">
-        <tr>
-            <th style="width: 8%">
-                @Html.DisplayNameFor(model => model.Category.Description)
-            </th>
 
-            <th style="width: 18%">
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-
-            <th style="width: 10%">
-                @Html.DisplayNameFor(model => model.ImagePath)
-            </th>
-
-            <th style="width: 50%">
-                @Html.DisplayNameFor(model => model.Header)
-            </th>
-
-            <th style="width: 14%"></th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
+    @if (ViewBag.AdminLength > 0)
+    {
+        <table class="table">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.Description)
-                </td>
+                <th style="width: 8%">
+                    @Html.DisplayNameFor(model => model.Category.Description)
+                </th>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
+                <th style="width: 18%">
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
 
-                <td>
-                    <img src="@Html.DisplayFor(modelItem => item.ImagePath)"
-                         style="width: 80px;"
-                         alt='@item.Title'
-                         title='@item.Title' />
-                </td>
+                <th style="width: 10%">
+                    @Html.DisplayNameFor(model => model.ImagePath)
+                </th>
 
-                <td>
-                    <span class="gray-color">@Html.DisplayFor(modelItem => item.Date)</span>
-                    @Html.DisplayFor(modelItem => item.Header)
-                    @Html.ActionLink("[+]", "Details", new { id = item.ID }, new { @class = "green-color" })
-                </td>
+                <th style="width: 50%">
+                    @Html.DisplayNameFor(model => model.Header)
+                </th>
 
-                <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }) |
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID })
-                </td>
+                <th style="width: 14%"></th>
             </tr>
-        }
-    </table>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Description)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+
+                    <td>
+                        <img src="@Html.DisplayFor(modelItem => item.ImagePath)"
+                             style="width: 80px;"
+                             alt='@item.Title'
+                             title='@item.Title' />
+                    </td>
+
+                    <td>
+                        <span class="gray-color">@Html.DisplayFor(modelItem => item.Date)</span>
+                        @Html.DisplayFor(modelItem => item.Header)
+                        @Html.ActionLink("[+]", "Details", new { id = item.ID }, new { @class = "green-color" })
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.ID }) |
+                        @Html.ActionLink("Eliminar", "Delete", new { id = item.ID })
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <div class="col-md-12" style="text-align: center">
+            <p>
+                No hay Noticias publicadas aún.
+            </p>
+        </div>
+    }
+
 </div>

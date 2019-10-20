@@ -29,5 +29,7 @@ namespace PrensaEstudiantil.Models
         {
             return new ApplicationDbContext();
         }
+
+        //public System.Data.Entity.DbSet<PrensaEstudiantil.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

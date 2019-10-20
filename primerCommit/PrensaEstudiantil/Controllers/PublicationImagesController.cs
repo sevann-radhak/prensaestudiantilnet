@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace PrensaEstudiantil.Controllers
 {
+    [Authorize]
     public class PublicationImagesController : Controller
     {
         private PrensaContext db = new PrensaContext();
@@ -139,8 +140,22 @@ namespace PrensaEstudiantil.Controllers
                         System.IO.File.Delete(fullPath);
                         ImagePath = Path.Combine(Server.MapPath(""), ImagePath);
 
+                        // Construct the name to the new image file
+                        string fileName = Path.GetFileNameWithoutExtension(ImageFile.FileName);
+                        string extension = Path.GetExtension(ImageFile.FileName);
+
+                        fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                        string fileNameServer = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
+
                         // Save the image in server
-                        ImageFile.SaveAs(fullPath);
+                        ImageFile.SaveAs(fileNameServer);
+
+                        // Update in DB
+                        Publication publication = db.Publications.Find(ID);
+                        publication.ImagePath = "/Content/Images/" + fileName;
+                        // Modify and save changes
+                        db.Entry(publication).State = EntityState.Modified;
+                        db.SaveChanges();
                     }
                 }
                 catch (Exception ex)

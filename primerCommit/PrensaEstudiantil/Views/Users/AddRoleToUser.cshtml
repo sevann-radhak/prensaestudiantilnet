@@ -1,0 +1,38 @@
+﻿@model PrensaEstudiantil.ModelView.UserView
+
+
+@{
+    ViewBag.Title = "Agregar Rol " + Model.Name;
+}
+
+<div class="col-md-12" style="background-color: inherit">
+
+    <h3>@ViewBag.Error</h3>
+    <h2>Agregar Rol a: @Model.Name</h2>
+
+
+    @using (Html.BeginForm("AddRoleToUser", "Users", new { UserID = Model.UserID }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal mt-40">
+            <div class="col-md-8" style="float: left;">
+                <div class="form-group">
+                    <div class="fol-md-10">
+                        @Html.DropDownList("RoleID", null, "Seleccione un Rol", htmlAttributes: new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.Role.RoleID, "", htmlAttributes: new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-mf-4" style="float: right;">
+                @Html.ActionLink("Regresar", "Roles", new { userID = Model.UserID }, new { @class = "btn btn-default" })
+                <input type="submit" value="Agregar Rol" class="btn btn-success ml-40" />
+            </div>
+
+        </div>
+    }
+
+    <br clear="all" />
+    <br clear="all" />
+</div>
