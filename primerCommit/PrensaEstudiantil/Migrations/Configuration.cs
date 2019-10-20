@@ -11,7 +11,7 @@ namespace PrensaEstudiantil.Migrations
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
-            ContextKey = "PrensaEstudiantil.Context.PrensaContext";
+            //ContextKey = "PrensaEstudiantil.Context.PrensaContext.";
         }
 
         protected override void Seed(PrensaEstudiantil.Context.PrensaContext context)

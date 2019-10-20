@@ -25,7 +25,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.CategoryID, "Categoría", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("CategoryID", null, htmlAttributes: new { @class = "form-control", style = "float: left" })
+                    @Html.DropDownList("CategoryID", null, "Seleccione una Categoría", htmlAttributes: new { @class = "form-control", style = "float: left", required = "required"  })
                     <div class="col-md-8" style="float: right">
                         @Html.EditorFor(model => model.Author, new { htmlAttributes = new { @class = "form-control hidden", style = "width: 100%; min-width: 100%;", placeholder = "Autor de la Columna de Opinión" } })
                         <div><label class="text-danger hidden" style="font-weight:normal !important;" id="authorValidation"></label></div>
@@ -36,7 +36,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.ImagePath, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    <input class="form-control col-md-4" type="file" name="ImageFile" required />
+                    <input class="form-control col-md-4" type="file" name="ImageFile"  accept="image/*" required />
                     <div class="col-md-8" style="float: right">
                         @Html.EditorFor(model => model.ImageDescription, new { htmlAttributes = new { @class = "form-control", style = "width: 100%; min-width: 100%;", placeholder = "Descripción de la Imagen principal." } })
                         <div> @Html.ValidationMessageFor(model => model.ImageDescription, "", new { @class = "text-danger" }) </div>
@@ -85,11 +85,6 @@
             </div>
         </div>
     }
-
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
-
 </div>
 
 @section Scripts {
@@ -97,9 +92,9 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
-        // Get action when selected Category is Opinion (CategoryID = 4)
+        // Get action when selected Category is Opinion (CategoryID = 2)
         $("#CategoryID").change(function () {
-            if ($(this).val() == 4) {
+            if ($(this).val() == 2) {
                 $('#Author').removeClass('hidden');
                 $('#Author').prop('required', true);
 

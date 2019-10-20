@@ -4,152 +4,138 @@
     ViewBag.Title = @Html.DisplayFor(model => model.Title);
 
 }
-    
-    <div class="col-md-12">
-        <div class="row col-md-12" style="text-align: center">
-            <h1>Sistema de Gestión de Publicaciones</h1>
-            <h4 class="green-color"><b>Editar Publicación</b></h4>
-            <hr />
-        </div>
 
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
+<div class="col-md-12" style="background-color: inherit">
+    <div class="row col-md-12" style="text-align: center">
+        <h1>Sistema de Gestión de Publicaciones</h1>
+        <h4 class="green-color"><b>Editar Publicación</b></h4>
+        <hr />
+    </div>
 
-            <div class="form-horizontal">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.ID)
+        <div class="form-horizontal">
 
-                @*<div class="form-group">
-                        @Html.LabelFor(model => model.CategoryID, "CategoryID", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownList("CategoryID", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
-                        </div>
-                    </div>*@
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ID)
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CategoryID, "Categoría", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DropDownList("CategoryID", null, htmlAttributes: new { @class = "form-control", style = "float: left" })
-                        <div class="col-md-8" style="float: right">
+            <div class="form-group">
+                @Html.LabelFor(model => model.CategoryID, "Categoría", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("CategoryID", null, htmlAttributes: new { @class = "form-control", style = "float: left" })
+                    <div class="col-md-8" style="float: right">
 
-                            @if (Model.CategoryID == 4)
-                            {
-                                @Html.EditorFor(model => model.Author, new { htmlAttributes = new { @class = "form-control", style = "width: 100%; min-width: 100%;", placeholder = "Autor de la Columna de Opinión" } })
-                            }
-                            else
-                            {
-                                @Html.EditorFor(model => model.Author, new { htmlAttributes = new { @class = "form-control hidden", style = "width: 100%; min-width: 100%;", placeholder = "Autor de la Columna de Opinión" } })
-                            }
-                        </div>
-                    </div>
-                </div>
-
-                @Html.EditorFor(model => model.ImagePath, new { htmlAttributes = new { @class = "hidden" } })
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", style = "width: 100%; min-width: 100%;", placeholder = "Ingrese el título de la publicación. Entre 10 y 150 caracteres." } })
-                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Header, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.TextAreaFor(model => model.Header, 5, 40, htmlAttributes: new { @class = "form-control", style = "width: 100%; max-width: 100%;", placeholder = "Ingrese el Encabezado (primer párrafo o el más importante) de la publicación." })
-                        @Html.ValidationMessageFor(model => model.Header, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ImageDescription, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ImageDescription, new { htmlAttributes = new { @class = "form-control", style = "width: 100%; max-width: 100%;", placeholder = "Descripción de la imagen principal." } })
-                        @Html.ValidationMessageFor(model => model.ImageDescription, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.TextAreaFor(model => model.Body, 25, 40, htmlAttributes: new { @class = "form-control", style = "width: 100%; max-width: 100%;", placeholder = "Ingrese el cuerpo de la publicación (texto completo). Excluya el párrafo ingresado en el Encabezado." })
-                        @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Footer, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Footer, new { htmlAttributes = new { @class = "form-control", style = "width: 100%; max-width: 100%;", placeholder = "Ingrese pie de nota, aclaración, referencia externa, entre otras..." } })
-                        @Html.ValidationMessageFor(model => model.Footer, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="hidden">
-                    @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10" style="text-align: center">
-                        <a href="#" onClick="history.back();" class="btn btn-default"> Cancelar </a>
-                        <a href="@Url.Action("ImagesByPublicationId", "PublicationImages", new { id = Model.ID })" id="editImages-modal" class="btn btn-primary ml-40"> Editar Imágenes </a>
-                        <input type="submit" value="Guardar" class="btn btn-success ml-40" />
+                        @*CategoryID = 2 for Opinion category publications*@
+                        @if (Model.CategoryID == 2)
+                        {
+                            @Html.EditorFor(model => model.Author, new { htmlAttributes = new { @class = "form-control", style = "width: 100%; min-width: 100%;", placeholder = "Autor de la Columna de Opinión" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => model.Author, new { htmlAttributes = new { @class = "form-control hidden", style = "width: 100%; min-width: 100%;", placeholder = "Autor de la Columna de Opinión" } })
+                        }
                     </div>
                 </div>
             </div>
-        }
-    </div>
 
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+            @Html.EditorFor(model => model.ImagePath, new { htmlAttributes = new { @class = "hidden" } })
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
+            <div class="form-group">
+                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", style = "width: 100%; min-width: 100%;", placeholder = "Ingrese el título de la publicación. Entre 10 y 150 caracteres." } })
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
+            <div class="form-group">
+                @Html.LabelFor(model => model.Header, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.Header, 5, 40, htmlAttributes: new { @class = "form-control", style = "width: 100%; max-width: 100%;", placeholder = "Ingrese el Encabezado (primer párrafo o el más importante) de la publicación." })
+                    @Html.ValidationMessageFor(model => model.Header, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-        <script>
-            // Get action when selected Category is Opinion (CategoryID = 4)
-            $("#CategoryID").change(function () {
-                if ($(this).val() == 4) {
-                    // If it is opion, shows the author field
-                    $('#Author').removeClass('hidden');
-                    $('#Author').prop('required', true);
-                }
-                else {
-                    $('#edit-submitted-first-name').removeAttr('required');
-                    $('#Author').addClass('hidden');
+            <div class="form-group" id="ImageDescriptionDiv">
+                @Html.LabelFor(model => model.ImageDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ImageDescription, new { htmlAttributes = new { @class = "form-control", style = "width: 100%; max-width: 100%;", placeholder = "Descripción de la imagen principal." } })
+                    @Html.ValidationMessageFor(model => model.ImageDescription, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-                    $('#authorValidation').text('');
-                    $('#authorValidation').addClass('hidden');
-                }
-            });
+            <div class="form-group">
+                @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.Body, 25, 40, htmlAttributes: new { @class = "form-control", style = "width: 100%; max-width: 100%;", placeholder = "Ingrese el cuerpo de la publicación (texto completo). Excluya el párrafo ingresado en el Encabezado." })
+                    @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-            // Get action when field author changes, validates its length
-            $("#Author").change(function () {
-                if ($("#Author").val().trim().length < 3 || $("#Author").val().trim().length > 60) {
-                    $('#authorValidation').removeClass('hidden');
-                    $('#authorValidation').text('Campo Autor debe tener entre 3 y 60 caracteres');
-                }
-                else {
-                    $('#authorValidation').text('');
-                    $('#authorValidation').addClass('hidden');
-                }
-            });
+            <div class="form-group">
+                @Html.LabelFor(model => model.Footer, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Footer, new { htmlAttributes = new { @class = "form-control", style = "width: 100%; max-width: 100%;", placeholder = "Ingrese pie de nota, aclaración, referencia externa, entre otras..." } })
+                    @Html.ValidationMessageFor(model => model.Footer, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
+            <div class="hidden">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
 
-                        //$(document).ready(function () {
-                        //    $('#editImages-modal').click(function () {
-                        //        $("#modal-editImages").modal('show');
-                        //    });
-
-                        //    $('#close-modal-editImages').click(function () {
-                        //        $("#modal-editImages").modal('hide');
-                        //    });
-                        //});
-        </script>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align: center">
+                    <a href="#" onClick="history.back();" class="btn btn-default"> Cancelar </a>
+                    <a href="@Url.Action("ImagesByPublicationId", "PublicationImages", new { id = Model.ID })" id="editImages-modal" class="btn btn-primary ml-40"> Editar Imágenes </a>
+                    <input type="submit" value="Guardar" class="btn btn-success ml-40" />
+                </div>
+            </div>
+        </div>
     }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script>
+
+        // Get action when selected Category is Opinion (CategoryID = 2)
+        if ($('#CategoryID').val() == 2) {
+            $('#ImageDescriptionDiv').addClass('hidden');
+        }
+
+        $("#CategoryID").change(function () {
+            if ($(this).val() == 2) {
+                // If it is opion, shows the author field
+                $('#Author').removeClass('hidden');
+                $('#ImageDescriptionDiv').addClass('hidden');
+                $('#Author').prop('required', true);
+            }
+            else {
+                $('#edit-submitted-first-name').removeAttr('required');
+                $('#Author').addClass('hidden');
+
+                $('#ImageDescriptionDiv').removeClass('hidden');
+
+                $('#authorValidation').text('');
+                $('#authorValidation').addClass('hidden');
+            }
+        });
+
+        // Get action when field author changes, validates its length
+        $("#Author").change(function () {
+            if ($("#Author").val().trim().length < 3 || $("#Author").val().trim().length > 60) {
+                $('#authorValidation').removeClass('hidden');
+                $('#authorValidation').text('Campo Autor debe tener entre 3 y 60 caracteres');
+            }
+            else {
+                $('#authorValidation').text('');
+                $('#authorValidation').addClass('hidden');
+            }
+        });
+    </script>
+}

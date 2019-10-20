@@ -4,35 +4,34 @@
     ViewBag.Title = "Prensa Estudiantil";
 }
 
-@Html.ActionLink("Administrador", "Admin", null, new { @class = "btn btn-primary" })
-
-
-<div class="mt-20 pt-20">
+<div class="pt-20">
     <div class="col-md-9">
 
-        @*List publication with category "Opinion" (CategoryID = 4)*@
+        @*List publication with category "Opinion" (CategoryID = 2)*@
         <div class="col-md-3" style="float: left;">
-            <div class="green-background" style="padding: 5px 0px 5px 16px;">
-                <span style="font-weight: bold; color:white; letter-spacing: 1pt;">OPINIÓN</span>
-            </div>
+            @if (@ViewBag.ColumnasLength > 0)
+            {
+                <div class="green-background" style="padding: 5px 0px 5px 16px;">
+                    <span style="font-weight: bold; color:white; letter-spacing: 1pt;">OPINIÓN</span>
+                </div>
 
-            <div class="col-md-12" style="border: 1px solid #79C655;">
-                @foreach (var columna in @ViewBag.Columnas)
-                {
-                    <a href="Publications/Details/@columna.ID" class="black-color">
-                        <div class="mt-20">
-                            <span style="font-weight: bold;">@columna.Title</span>
-                            <img class="card-img"
-                                 src="@columna.ImagePath"
-                                 style="margin-top: 5px; width: 100%;"
-                                 alt='@columna.Title'
-                                 title='@columna.Title' />
-                        </div>
-                    </a>
-                    <span style="font-size: 9px;">Por: </span> <span class="green-color" style="font-size: 8px; font-weight: bold;"> @columna.Author</span>
+                <div class="col-md-12" style="border: 1px solid #79C655;">
+                    @foreach (var columna in @ViewBag.Columnas)
+                    {
+                        <a href="Publications/Details/@columna.ID" class="black-color">
+                            <div class="mt-20">
+                                <span style="font-weight: bold;">@columna.Title</span>
+                                <img class="card-img"
+                                     src="@columna.ImagePath"
+                                     style="margin-top: 5px; width: 100%;"
+                                     alt='@columna.Title'
+                                     title='@columna.Title' />
+                            </div>
+                        </a>
+                        <span style="font-size: 9px;">Por: </span> <span class="green-color" style="font-size: 8px; font-weight: bold;"> @columna.Author</span>
 
-                    <hr style="border:1px solid #79C655;">
-                }
+                        <hr style="border:1px solid #79C655;">
+                    }
 
                     <div style="text-align: right">
                         <a href="Publications/Opinion" class="green-color">
@@ -40,7 +39,8 @@
                             <span class='glyphicon glyphicon-arrow-right'></span>
                         </a>
                     </div>
-            </div>
+                </div>
+            }
         </div>
 
         @*Variables*@
@@ -102,5 +102,6 @@
         }
     </div>
 
+    <br clear="all" />
     <br clear="all" />
 </div>

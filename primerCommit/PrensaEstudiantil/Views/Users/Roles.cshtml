@@ -1,0 +1,47 @@
+﻿@model PrensaEstudiantil.ModelView.UserView
+
+@{
+    ViewBag.Title = "Roles " + Model.Name;
+}
+
+<div class="col-md-12" style="background-color: inherit">
+    <div style="float: left">
+        <h2>Roles para: @Model.Name</h2>
+    </div>
+
+    <div style="float: right" class="mt-20">
+        @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Agregar Rol", "AddRoleToUser", new { UserID = Model.UserID, Email = Model.Email, Name = Model.Name }, new { @class = "btn btn-success ml-40" })
+    </div>
+
+    <br clear="all" />
+    <br clear="all" />
+
+    @if (ViewBag.RolesCount > 0)
+    {
+        <table class="table">
+            @foreach (var item in Model.Roles)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Eliminar", "DeteleRoleToUser", new { roleID = item.RoleID, userID = Model.UserID })
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <div class="col-md-12 mt-20" style="text-align: center">
+            <p>
+                Usuario sin roles asociados
+            </p>
+
+            <br clear="all" />
+        </div>
+    }
+</div>
