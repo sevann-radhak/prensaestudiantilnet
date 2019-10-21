@@ -10,36 +10,63 @@ using System.Web.Mvc;
 
 namespace PrensaEstudiantil.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Users
-        [Authorize(Users = "sevann.radhak@gmail.com")]
         public ActionResult Index()
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+
             var users = userManager.Users.ToList();
-            var usersVieww = new List<UserView>();
+            var roles = roleManager.Roles.ToList();
+
+            // Array to put users and roles for each user
+            var usersView = new List<UserView>();
 
             // Create a new UserView object for every user of User Model
             foreach (var user in users)
             {
+                // Array to put the roles of user
+                var rolesUser = new List<RoleView>();
+
+                // Verify roles for user
+                foreach (var role in roles)
+                {
+                    // IF user is in role, add role to rolesUser
+                    if (userManager.IsInRole(user.Id, role.Name))
+                    {
+                        // Construct the RoleView object to add to rolesUser
+                        var roleUser = new RoleView {
+                            Name = role.Name,
+                            RoleID = role.Id
+                        };
+
+                        // Add role to rolesUser
+                        rolesUser.Add(roleUser);
+                    }
+                }
+
                 var userView = new UserView
                 {
                     Email = user.Email,
                     Name = user.UserName,
-                    UserID = user.Id
+                    UserID = user.Id,
+                    Roles = rolesUser
                 };
 
                 // Add userView in usersView array
-                usersVieww.Add(userView);
+                usersView.Add(userView);
             }
 
-            return View(usersVieww);
+            return View(usersView);
         }
 
         // Get the Roles by UserID
+        [Authorize(Roles = "SuperAdmin")]
         public ActionResult Roles(string userID)
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
@@ -82,7 +109,8 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // GET: Users/AddRoleToUser
-        // Add role t0 user
+        // Add role to user
+        [Authorize(Roles = "SuperAdmin")]
         public ActionResult AddRoleToUser(string UserID, string Email, string Name)
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
@@ -127,7 +155,7 @@ namespace PrensaEstudiantil.Controllers
             var role = roles.Find(r => r.Id == roleID);
 
             //Verify if user alreads has the role
-            if(userManager.IsInRole(UserID, role.Name))
+            if (userManager.IsInRole(UserID, role.Name))
             {
                 // ViewBag for error message
                 ViewBag.Error = "Usuario ya pertenece a Rol seleccionado.";
@@ -172,6 +200,7 @@ namespace PrensaEstudiantil.Controllers
 
         // DELETE: Users/DeteleRoleToUser
         // Delete a role to user
+        [Authorize(Roles = "SuperAdmin")]
         public ActionResult DeteleRoleToUser(string userID, string roleID)
         {
             // Verify userID and roleID are valids

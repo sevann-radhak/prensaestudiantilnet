@@ -11,7 +11,7 @@ using PrensaEstudiantil.Models;
 
 namespace PrensaEstudiantil.Controllers
 {
-    [Authorize(Users = "sevann.radhak@gmail.com")]
+    [Authorize(Roles = "SuperAdmin")]
     public class CategoriesController : Controller
     {
         private PrensaContext db = new PrensaContext();

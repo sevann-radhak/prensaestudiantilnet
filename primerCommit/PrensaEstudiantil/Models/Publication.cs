@@ -46,8 +46,11 @@ namespace PrensaEstudiantil.Models
         [StringLength(60, ErrorMessage = "El campo {0} debe tener entre {2} y {1} caracteres", MinimumLength = 3)]
         public string Author { get; set; }
 
-        //[Display(Name = "Estado")]
-        //public int Status { get; set; }
+        [Display(Name = "Usuario")]
+        public string UserPublication { get; set; }
+
+        [Display(Name = "Usuario")]
+        public string UserPublicationEdit { get; set; }
 
         [Display(Name = "Categoría")]
         [Required(ErrorMessage = "{0} campo obligatorio")]
