@@ -5,6 +5,10 @@
     ViewBag.Title = "Admin";
 }
 
+<div class="text-danger">
+    @ViewBag.Permissions
+</div>
+
 <div class="col-md-12" style="background-color: inherit">
     <div class="row col-md-12" style="text-align: center">
         <h1>Sistema de Gestión de Publicaciones</h1>
@@ -15,13 +19,14 @@
     <div style="width: 100%">
         <div style="float: left;">
             @Html.ActionLink("Videos", "Index", "YoutubeVideos", new { }, new { @class = "btn btn-primary" })
+
             @if (User.IsInRole("Admin"))
             {
-                @Html.ActionLink("Categorías", "Index", "Categories", new { }, new { @class = "btn btn-warning", style = "margin-left: 5px;" })
+                @Html.ActionLink("Usuarios", "Index", "Users", new { }, new { @class = "btn btn-info", style = "margin-left: 5px;" })
 
-                if (User.Identity.GetUserName() == "sevann.radhak@gmail.com")
+                if (User.IsInRole("SuperAdmin"))
                 {
-                    @Html.ActionLink("Usuarios", "Index", "Users", new { }, new { @class = "btn btn-info ml-10" })
+                    @Html.ActionLink("Categorías", "Index", "Categories", new { }, new { @class = "btn btn-warning ml-10" })
                 }
             }
         </div>
@@ -46,11 +51,11 @@
                 </th>
 
                 <th style="width: 10%">
-                    @Html.DisplayNameFor(model => model.ImagePath)
+                    Imagen
                 </th>
 
                 <th style="width: 50%">
-                    @Html.DisplayNameFor(model => model.Header)
+                    Publicación
                 </th>
 
                 <th style="width: 14%"></th>
@@ -75,14 +80,32 @@
                     </td>
 
                     <td>
-                        <span class="gray-color">@Html.DisplayFor(modelItem => item.Date)</span>
+                        <small>
+                            <span class="gray-color">@Html.DisplayFor(modelItem => item.Date)</span>
+                            | <span class="green-color">@Html.DisplayFor(modelItem => item.UserPublication)</span>
+                            @if (item.UserPublicationEdit != null)
+                            {
+                                <span style="color: inherit"> | </span> <span class="gray-color">@Html.DisplayFor(modelItem => item.UserPublicationEdit)</span>
+                            }
+                            <br />
+                        </small>
                         @Html.DisplayFor(modelItem => item.Header)
                         @Html.ActionLink("[+]", "Details", new { id = item.ID }, new { @class = "green-color" })
                     </td>
 
                     <td>
-                        @Html.ActionLink("Editar", "Edit", new { id = item.ID }) |
-                        @Html.ActionLink("Eliminar", "Delete", new { id = item.ID })
+                        @*Admins options*@
+                        @if (Request.IsAuthenticated && User.IsInRole("Admin") || User.Identity.GetUserName() == item.UserPublication)
+                        {
+                            <div class="mt-20" style="width: 100%; text-align: right">
+                                @Html.ActionLink("Editar", "Edit", new { id = item.ID })
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <span>|</span> @Html.ActionLink("Eliminar", "Delete", new { id = item.ID })
+                                }
+                            </div>
+                        }
                     </td>
                 </tr>
             }

@@ -209,7 +209,7 @@
 
     <br clear="all" />
 
-    <div class=" mt-20" style="text-align: left;">
+    <div class="mt-20" style="text-align: left;">
         <div style="float: left;">
             <div class="fb-share-button" data-href="http://prensaestudiantil.org/Publications/Details/@Html.DisplayFor(model => model.ID)" data-layout="button_count" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A54304%2FPublications%2FDetails%2F22&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Compartir</a></div>
         </div>
@@ -228,9 +228,34 @@
             </small>
         </div>
 
+        @*Admins options*@
+        @if (Request.IsAuthenticated && User.IsInRole("Admin") || User.Identity.Name == Model.UserPublication)
+        {
+            <div class="mt-20" style="float: left">
+                @Html.ActionLink("Editar", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary" })
+            </div>
+
+            <div class="mt-20 ml-20" style="float: left">
+                @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("Eliminar", "Delete", new { id = Model.ID }, new { @class = "btn btn-danger" })
+
+                    <span class="ml-20" style="margin-top: 5px;">
+                        Creado por: <span class="green-color" style="font-weight: bold;">@Model.UserPublication</span>
+                        @if (Model.UserPublicationEdit != null)
+                        {
+                            <span> | Editado por:</span><span style="font-weight: bold;"> @Model.UserPublication </span>
+                        }
+                    </span>
+                }
+            </div>
+
+            <br clear="all" />
+        }
+
         <div class="fb-comments mt-40" data-href="http://prensaestudiantil.org/Publications/Details/@Html.DisplayFor(model => model.ID)" data-width="" data-numposts="50"></div>
     </div>
 </div>
 
 <br clear="all" />
-<br clear="all" /> 
+<br clear="all" />

@@ -69,6 +69,14 @@ namespace PrensaEstudiantil.Models
         [Display(Name = "Correo electrónico")]
         public string Email { get; set; }
 
+        //[Required]
+        //[Display(Name = "Nombre del Colaborador")]
+        //public string Name { get; set; }
+
+        //[Required]
+        //[Display(Name = "Área")]
+        //public string Area { get; set; }
+
         [Required]
         [StringLength(100, ErrorMessage = "El número de caracteres de {0} debe ser al menos {2}.", MinimumLength = 6)]
         [DataType(DataType.Password)]

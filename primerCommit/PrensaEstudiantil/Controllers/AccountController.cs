@@ -79,7 +79,8 @@ namespace PrensaEstudiantil.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    //return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Admin", "Publications");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -146,7 +147,7 @@ namespace PrensaEstudiantil.Controllers
         // POST: /Account/Register
         [HttpPost]
         //[AllowAnonymous]
-        [Authorize(Users = "sevann.radhak@gmail.com")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {

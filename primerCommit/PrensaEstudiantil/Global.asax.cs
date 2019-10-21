@@ -38,12 +38,17 @@ namespace PrensaEstudiantil
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
 
-            var user = userManager.FindByName("sevann.radhak@gmail.com");
+            var user1 = userManager.FindByName("sevann.radhak@gmail.com");
+            var user2 = userManager.FindByName("prensaestudiantil@hotmail.com");
 
-            // Add user to roles
-            if (!userManager.IsInRole(user.Id, "Admin"))
+            // Add users to roles
+            if (!userManager.IsInRole(user1.Id, "SuperAdmin"))
             {
-                userManager.AddToRole(user.Id, "Admin");
+                userManager.AddToRole(user1.Id, "SuperAdmin");
+            }
+            if (!userManager.IsInRole(user2.Id, "SuperAdmin"))
+            {
+                userManager.AddToRole(user2.Id, "SuperAdmin");
             }
         }
 
@@ -52,25 +57,37 @@ namespace PrensaEstudiantil
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
             // Search if superUser alrady exists
-            var user = userManager.FindByName("sevann.radhak@gmail.com");
+            var user1 = userManager.FindByName("sevann.radhak@gmail.com");
+            var user2 = userManager.FindByName("prensaestudiantil@hotmail.com");
 
-            if (user == null)
+            if (user1 == null)
             {
-                // Create the object
-                user = new ApplicationUser
+                // Create the objects
+                user1 = new ApplicationUser
                 {
                     UserName = "sevann.radhak@gmail.com",
                     Email = "sevann.radhak@gmail.com"
                 };
+                user2 = new ApplicationUser
+                {
+                    UserName = "prensaestudiantil@hotmail.com",
+                    Email = "prensaestudiantil@hotmail.com"
+                };
 
-                // Create the user
-                userManager.Create(user, "Pr3n$a*20!ñ");
+                // Create the users (user, password)
+                userManager.Create(user1, "Pr3n$a*20!ñ");
+                userManager.Create(user2, "Pr3n$a*20!ñ");
             }
         }
 
         private void CreateRoles(ApplicationDbContext db)
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+
+            if (!roleManager.RoleExists("SuperAdmin"))
+            {
+                roleManager.Create(new IdentityRole("SuperAdmin"));
+            }
 
             if (!roleManager.RoleExists("Admin"))
             {

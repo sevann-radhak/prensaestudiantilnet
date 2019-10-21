@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using PrensaEstudiantil.Context;
 using PrensaEstudiantil.Models;
+using Microsoft.AspNet.Identity;
 
 namespace PrensaEstudiantil.Controllers
 {
@@ -58,7 +59,7 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // GET: Publications/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "Description");
@@ -70,16 +71,14 @@ namespace PrensaEstudiantil.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public ActionResult Create([Bind(Include = "ID,Title,Header,Body,Footer,Date,LastUpdate,Author,ImageDescription,CategoryID")] Publication publication, HttpPostedFileBase ImageFile)
         {
             if (ModelState.IsValid)
             {
-                // Set the current date and time
+                // Set the current date and time and default values
                 publication.Date = DateTime.Now;
-
-                // Set initial status to 1 (Creada, pendiente de completar)
-                //publication.Status = 1;
+                publication.UserPublication = User.Identity.GetUserName();
 
                 // Verify if there is an associated image
                 if (ImageFile != null && ImageFile.ContentLength > 0)
@@ -134,7 +133,7 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // GET: Publications/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -149,6 +148,15 @@ namespace PrensaEstudiantil.Controllers
                 return HttpNotFound();
             }
 
+            // Check if it's the same User or has persmissions
+            if (!User.IsInRole("Admin") && publication.UserPublication != User.Identity.GetUserName())
+            {
+                var permissions = "Usted no tiene permisos para ejecutar esta acción.";
+                ViewBag.Permissions = permissions;
+
+                return RedirectToAction("Admin", "Publications", permissions);
+            }
+
             ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "Description", publication.CategoryID);
 
             return View(publication);
@@ -159,13 +167,14 @@ namespace PrensaEstudiantil.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "ID,Title,Header,Body,Footer,Date,ImagePath,ImageDescription,Author,LastUpdate,CategoryID")] Publication publication)
+        [Authorize]
+        public ActionResult Edit([Bind(Include = "ID,Title,Header,Body,Footer,Date,ImagePath,ImageDescription,Author,UserPublication,LastUpdate,CategoryID")] Publication publication)
         {
             if (ModelState.IsValid)
             {
                 // Set the current date and time for Update Date
                 publication.LastUpdate = DateTime.Now;
+                publication.UserPublicationEdit = User.Identity.GetUserName();
 
                 // Set null value for publications different of Opinion Category (CategoryID = 2) 
                 if (publication.CategoryID == 2)
@@ -218,7 +227,7 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // Publications for admin view
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public ActionResult Admin()
         {
             var publications = db.Publications.OrderByDescending(x => x.Date).Take(20).ToList();
@@ -249,7 +258,6 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // Publications of Social Category 
-        [AllowAnonymous]
         public ActionResult Social()
         {
             var publications = db.Publications.Where(x => x.CategoryID == 3).OrderByDescending(x => x.Date).Take(21).ToList();
@@ -270,11 +278,11 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // Add images to publication at creating moment
-        [Authorize(Roles = "Admin")]
-        public ActionResult AddImage(PublicationImage publicationImage)
-        {
-            return View(publicationImage);
-        }
+        //[Authorize(Roles = "Admin")]
+        //public ActionResult AddImage(PublicationImage publicationImage)
+        //{
+        //    return View(publicationImage);
+        //}
 
         protected override void Dispose(bool disposing)
         {

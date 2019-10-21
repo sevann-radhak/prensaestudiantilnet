@@ -10,13 +10,16 @@ namespace PrensaEstudiantil.ModelView
     {
         public string UserID { get; set; }
 
+        [Display(Name = "Nombre")]
         public string Name { get; set; }
 
+        [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         public RoleView Role { get; set; }
 
+        [Display(Name = "Roles")]
         public List<RoleView> Roles { get; set; }
     }
 }

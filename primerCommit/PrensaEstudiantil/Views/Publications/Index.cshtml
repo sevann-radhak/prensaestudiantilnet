@@ -72,11 +72,13 @@
                     </div>
 
                     <div class="car-body">
-                        <img class="card-img"
-                             src="@Html.DisplayFor(modelItem => item.ImagePath)"
-                             style="margin-top: 5px; width: 100%;"
-                             alt='@item.Title'
-                             title='@item.Title' />
+                        <a href="Publications/Details/@item.ID" class="black-color">
+                            <img class="card-img"
+                                 src="@Html.DisplayFor(modelItem => item.ImagePath)"
+                                 style="margin-top: 5px; width: 100%;"
+                                 alt='@item.Title'
+                                 title='@item.Title' />
+                        </a>
 
                         <p class="card-text" style="text-align: justify">
                             @Html.DisplayFor(modelItem => item.Header)

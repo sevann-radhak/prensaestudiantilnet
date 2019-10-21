@@ -5,7 +5,14 @@
 }
 
 <div class="col-md-12" style="background-color: inherit">
-    <h2>Administrador de Permisos</h2>
+    <div class="col-md-12">
+        <div style="float: left">
+            <h2>Administrador de Permisos</h2>
+        </div>
+        <div class="mt-20" style="float: right">
+            @Html.ActionLink("Nuevo Usuario", "Register", "Account", new { }, new { @class = "btn btn-success" })
+        </div>
+    </div>
 
     <table class="table">
         <tr>
@@ -17,7 +24,14 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
 
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Roles)
+            </th>
+
+            @if (User.IsInRole("SuperAdmin"))
+            {
+                <th></th>
+            }
         </tr>
 
         @foreach (var item in Model)
@@ -31,9 +45,21 @@
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
 
+                @{int counter = 0;}
                 <td>
-                    @Html.ActionLink("Roles", "Roles", new { userID = item.UserID })
+                    @foreach (var rol in item.Roles)
+                    {
+                        counter++;
+                        <span>@rol.Name @if (counter != item.Roles.Count) { <span>|</span>} </span>
+                    }
                 </td>
+
+                @if (User.IsInRole("SuperAdmin"))
+                {
+                    <td>
+                        @Html.ActionLink("Administrar", "Roles", new { userID = item.UserID })
+                    </td>
+                }
             </tr>
         }
     </table>
