@@ -15,40 +15,41 @@
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
+<div class="form-horizontal">
 
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.YoutubeVideoID)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.YoutubeVideoID)
+    @Html.HiddenFor(model => model.UserPublicationVideo)
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.URL, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <div style="float: left">
-                        @Html.EditorFor(model => model.URL, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    <div style="float: left; padding-top: 10px; padding-left: 15px;">
-                        <span class='glyphicon glyphicon-search' title="Ayuda" id="help-modal"></span>
-                    </div>
-                    <br clear="all" />
-                    @Html.ValidationMessageFor(model => model.URL, "", new { @class = "text-danger" })
-                </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.URL, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div style="float: left">
+                @Html.EditorFor(model => model.URL, new { htmlAttributes = new { @class = "form-control" } })
             </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", style = "width: 80%; min-width: 80%;" } })
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                </div>
+            <div style="float: left; padding-top: 10px; padding-left: 15px;">
+                <span class='glyphicon glyphicon-search' title="Ayuda" id="help-modal"></span>
             </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10" style="text-align: center">
-                    <a href="#" onClick="history.back();" class="btn btn-default"> Cancelar </a>
-                    <input type="submit" value="Guardar" class="btn btn-success" style="margin-left: 50px" />
-                </div>
-            </div>
+            <br clear="all" />
+            @Html.ValidationMessageFor(model => model.URL, "", new { @class = "text-danger" })
         </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", style = "width: 80%; min-width: 80%;" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10" style="text-align: center">
+            <a href="#" onClick="history.back();" class="btn btn-default"> Cancelar </a>
+            <input type="submit" value="Guardar" class="btn btn-success" style="margin-left: 50px" />
+        </div>
+    </div>
+</div>
     }
 
 </div>

@@ -4,7 +4,32 @@
     ViewBag.Title = "Agregar Nuevo Video";
 }
 
+@*ViewBags*@
+<script>
+    //setTimeout(function () {
+    //    $('#permissions').hide("slow");
+    //}, 3000);
+
+    settimeout(function () {
+        $('#success').hide("slow");
+    }, 3000);
+</script>
+
 <div class="col-md-12" style="background-color: inherit">
+    @*ViewBag messages*@
+    @*@if (ViewBag.Permissions != null)
+        {
+            <div class="alert alert-danger mt-20" id="permissions" style="text-align: center" role="alert">
+                @ViewBag.Permissions
+            </div>
+        }*@
+    @if(ViewBag.Success != null)
+    {
+        <div class="alert alert-success mt-20" id="success" style="text-align: center" role="alert">
+            @ViewBag.Success
+        </div>
+    }
+
     <div class="row col-md-12" style="text-align: center">
         <h1>Sistema de Gestión de Publicaciones</h1>
         <h4 class="green-color"><b>Agregar Nuevo Video</b></h4>
@@ -27,7 +52,7 @@
                     <div style="float: left; padding-top: 10px; padding-left: 15px;">
                         <span class='glyphicon glyphicon-search' title="Ayuda" id="modal-help"></span>
                     </div>
-                    <br clear="all"/>
+                    <br clear="all" />
                     @Html.ValidationMessageFor(model => model.URL, "", new { @class = "text-danger" })
                 </div>
             </div>

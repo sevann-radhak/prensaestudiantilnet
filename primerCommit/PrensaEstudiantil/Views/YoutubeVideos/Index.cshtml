@@ -4,61 +4,110 @@
     ViewBag.Title = "Index";
 }
 
-    <div class="col-md-12" style="background-color: inherit">
-        <div class="row col-md-12" style="text-align: center">
-            <h1>Sistema de Gestión de Publicaciones</h1>
-            <h4 class="green-color"><b>Administrador de Videos</b></h4>
-            <hr />
+@*ViewBags*@
+<script>
+    //setTimeout(function () {
+    //    $('#permissions').hide("slow");
+    //}, 3000);
+
+    setTimeout(function () {
+        $('#success').hide("slow");
+    }, 3000);
+</script>
+
+<div class="col-md-12" style="background-color: inherit">
+
+    @*ViewBag messages*@
+    @if (ViewBag.Success != null)
+    {
+        <div class="alert alert-success mt-20" id="success" style="text-align: center" role="alert">
+            @ViewBag.Success
         </div>
-
-        <div style="width: 100%">
-            <div style="float: right;">
-                @Html.ActionLink("Nuevo Video", "Create", null, new { @class = "btn btn-success" })
-            </div>
-
-            <p> <br clear="all" /> </p>
+    }
+    @*@if (ViewBag.Permissions != null)
+    {
+        <div class="alert alert-danger mt-20" id="permissions" style="text-align: center" role="alert">
+            @ViewBag.Permissions
         </div>
+    }*@
 
-        @if (ViewBag.VideosLength > 0)
-        {
-            <table class="table">
-                <tr>
-                    <th style="width: 30%">
-                        Video
-                    </th>
-
-                    <th style="width: 55%">
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-
-                    <th style="width: 15%"></th>
-                </tr>
-
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            <iframe src="https://www.youtube.com/embed/@Html.DisplayFor(modelItem => item.URL)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Editar", "Edit", new { id = item.YoutubeVideoID }) |
-                            @Html.ActionLink("Eliminar", "Delete", new { id = item.YoutubeVideoID })
-                        </td>
-                    </tr>
-                }
-            </table>
-        }
-        else
-        {
-            <div class="col-md-12" style="text-align:center">
-                <p>
-                    No hay videos publicados aún.
-                </p>
-            </div>
-        }
-
-
+    <div class="row col-md-12" style="text-align: center">
+        <h1>Sistema de Gestión de Publicaciones</h1>
+        <h4 class="green-color"><b>Administrador de Videos</b></h4>
+        <hr />
     </div>
+
+    <div style="width: 100%">
+        <div style="float: right;">
+            @Html.ActionLink("Nuevo Video", "Create", null, new { @class = "btn btn-success" })
+        </div>
+
+        <p> <br clear="all" /> </p>
+    </div>
+
+    @if (ViewBag.VideosLength > 0)
+    {
+        <table class="table">
+            <tr>
+                <th style="width: 30%">
+                    Video
+                </th>
+
+                <th style="width: 30%">
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+
+                <th style="width: 25%">Usuario</th>
+
+                <th style="width: 15%"></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <iframe src="https://www.youtube.com/embed/@Html.DisplayFor(modelItem => item.URL)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+                    <td>
+                        <span class="green-color"><b>@Html.DisplayFor(modelItem => item.UserPublicationVideo)</b></span>
+                        @if (item.UserPublicationVideoEdit != null)
+                        {
+                            <p>
+                                <span class="gray-color">Editado por: @Html.DisplayFor(modelItem => item.UserPublicationVideoEdit) </span>
+                            </p>
+                        }
+                    </td>
+
+                    <td style="text-align: right; padding-right: 50px;">
+                        @*Admins options*@
+                        @if (Request.IsAuthenticated && User.IsInRole("Admin") || User.Identity.Name == item.UserPublicationVideo)
+                        {
+                            <span>@Html.ActionLink("Editar", "Edit", new { id = item.YoutubeVideoID })</span>
+
+                            if (User.IsInRole("Admin"))
+                            {
+                                <span> | </span> @Html.ActionLink("Eliminar", "Delete", new { id = item.YoutubeVideoID })
+                            }
+                        }
+
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <div class="col-md-12" style="text-align:center">
+            <p>
+                No hay videos publicados aún.
+            </p>
+        </div>
+    }
+
+
+</div>

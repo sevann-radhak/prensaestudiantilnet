@@ -6,11 +6,10 @@
     {
         @Html.AntiForgeryToken()
         <ul class="nav navbar-nav">
-            <li class="dropdown">
-                @*@Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-                    @Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
-                @Html.ActionLink(User.Identity.GetUserName(), "Admin", "Publications")
-            </li>
+            @if (User.IsInRole("Admin") || User.IsInRole("User"))
+            {
+                <li>@Html.ActionLink(User.Identity.GetUserName(), "Admin", "Publications")</li>
+            }
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a></li>
         </ul>
     }
