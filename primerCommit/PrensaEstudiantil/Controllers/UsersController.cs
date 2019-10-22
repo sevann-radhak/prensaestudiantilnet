@@ -10,10 +10,10 @@ using System.Web.Mvc;
 
 namespace PrensaEstudiantil.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     public class UsersController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Users
         public ActionResult Index()
@@ -132,6 +132,7 @@ namespace PrensaEstudiantil.Controllers
         // POST: Users/AddRoleToUser
         // Add role to user
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin")]
         public ActionResult AddRoleToUser(string UserID)
         {
             var roleID = Request["RoleID"];

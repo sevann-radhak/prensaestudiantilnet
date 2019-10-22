@@ -15,7 +15,10 @@ namespace PrensaEstudiantil.Controllers
 {
     public class PublicationsController : Controller
     {
-        private PrensaContext db = new PrensaContext();
+        private readonly PrensaContext db = new PrensaContext();
+
+        // ViewBagss
+        readonly string permissions = "Usted no tiene permisos para ejecutar esta acción.";
 
         // GET: Publications
         public ActionResult Index()
@@ -50,6 +53,11 @@ namespace PrensaEstudiantil.Controllers
                 return HttpNotFound();
             }
 
+            if (TempData["Success"] != null)
+            {
+                ViewBag.Success = TempData["Success"].ToString();
+            }
+
             // Get images associated to current publication
             var images = db.PublicationImages.Where(x => x.ID == id).OrderByDescending(x => x.PublicationImagenID).ToList();
 
@@ -59,7 +67,7 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // GET: Publications/Create
-        [Authorize]
+        [Authorize(Roles = "Admin, User")]
         public ActionResult Create()
         {
             ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "Description");
@@ -71,7 +79,7 @@ namespace PrensaEstudiantil.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles = "Admin, User")]
         public ActionResult Create([Bind(Include = "ID,Title,Header,Body,Footer,Date,LastUpdate,Author,ImageDescription,CategoryID")] Publication publication, HttpPostedFileBase ImageFile)
         {
             if (ModelState.IsValid)
@@ -110,6 +118,9 @@ namespace PrensaEstudiantil.Controllers
                         db.Publications.Add(publication);
                         db.SaveChanges();
 
+                        // ViewBags
+                        TempData["Success"] = "Publicación grabada exitosamente";
+
                         return RedirectToAction("Details/" + publication.ID);
                     }
                     catch (Exception ex)
@@ -133,7 +144,7 @@ namespace PrensaEstudiantil.Controllers
         }
 
         // GET: Publications/Edit/5
-        [Authorize]
+        [Authorize(Roles = "Admin, User")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -151,10 +162,17 @@ namespace PrensaEstudiantil.Controllers
             // Check if it's the same User or has persmissions
             if (!User.IsInRole("Admin") && publication.UserPublication != User.Identity.GetUserName())
             {
-                var permissions = "Usted no tiene permisos para ejecutar esta acción.";
-                ViewBag.Permissions = permissions;
+                //var publications = db.Publications.OrderByDescending(x => x.Date).Take(20).ToList();
 
-                return RedirectToAction("Admin", "Publications", permissions);
+                //ViewBag.Permissions = permissions;
+                //ViewBag.AdminLength = publications.Count;
+
+                // ViewBags
+                TempData["Permissions"] = permissions;
+
+                return RedirectToAction("Admin");
+
+                //return View("Admin", publications);
             }
 
             ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "Description", publication.CategoryID);
@@ -167,7 +185,7 @@ namespace PrensaEstudiantil.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles = "Admin, User")]
         public ActionResult Edit([Bind(Include = "ID,Title,Header,Body,Footer,Date,ImagePath,ImageDescription,Author,UserPublication,LastUpdate,CategoryID")] Publication publication)
         {
             if (ModelState.IsValid)
@@ -189,6 +207,9 @@ namespace PrensaEstudiantil.Controllers
                 // Modify and save changes
                 db.Entry(publication).State = EntityState.Modified;
                 db.SaveChanges();
+
+                // ViewBags
+                TempData["Success"] = "Publicación actualizada exitosamente";
 
                 return RedirectToAction("Details/" + publication.ID);
             }
@@ -223,16 +244,30 @@ namespace PrensaEstudiantil.Controllers
             db.Publications.Remove(publication);
             db.SaveChanges();
 
+            // ViewBags
+            TempData["Success"] = "Publicación eliminada correctamente.";
+
             return RedirectToAction("Admin");
         }
 
         // Publications for admin view
-        [Authorize]
+        [Authorize(Roles = "Admin, SuperAdmin, User")]
         public ActionResult Admin()
         {
             var publications = db.Publications.OrderByDescending(x => x.Date).Take(20).ToList();
 
+            // ViewBags
             ViewBag.AdminLength = publications.Count;
+
+            if (TempData["Permissions"] != null)
+            {
+                ViewBag.Permissions = TempData["Permissions"].ToString();
+            }
+
+            if (TempData["Success"] != null)
+            {
+                ViewBag.Success = TempData["Success"].ToString();
+            }
 
             return View(publications);
         }
@@ -251,7 +286,7 @@ namespace PrensaEstudiantil.Controllers
         public ActionResult Biosociedad()
         {
             var publications = db.Publications.Where(x => x.CategoryID == 4).OrderByDescending(x => x.Date).Take(21).ToList();
-            
+
             ViewBag.BiosociedadLength = publications.Count;
 
             return View(publications);
@@ -273,6 +308,11 @@ namespace PrensaEstudiantil.Controllers
             var videos = db.YoutubeVideos.OrderByDescending(x => x.YoutubeVideoID).Take(21).ToList();
 
             ViewBag.VideosLength = videos.Count;
+
+            if (TempData["Permissions"] != null)
+            {
+                ViewBag.Permissions = TempData["Permissions"].ToString();
+            }
 
             return View(videos);
         }

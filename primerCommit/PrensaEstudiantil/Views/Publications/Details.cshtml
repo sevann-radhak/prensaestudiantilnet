@@ -4,6 +4,13 @@
     ViewBag.Title = @Html.DisplayFor(model => model.Title);
 }
 
+@*ViewBags*@
+<script>
+    setTimeout(function () {
+        $('#success').hide("slow");
+    }, 3000);
+</script>
+
 @section Scripts {
     @*Redes sociales plugins*@
     <div id="fb-root"></div>
@@ -22,6 +29,13 @@
 </style>
 
 <div class="col-md-12">
+    @*ViewBag messages*@
+    @if (ViewBag.Success != null)
+    {
+        <div class="alert alert-success mt-20" id="success" style="text-align: center" role="alert">
+            @ViewBag.Success
+        </div>
+    }
 
     @*For Publications with "Opinion" Category (CategoryID = 2)*@
     @if (Model.CategoryID == 2)

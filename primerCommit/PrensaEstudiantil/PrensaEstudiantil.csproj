@@ -290,7 +290,6 @@
     <Content Include="Views\Publications\Admin.cshtml" />
     <Content Include="Views\YoutubeVideos\Create.cshtml" />
     <Content Include="Views\YoutubeVideos\Delete.cshtml" />
-    <Content Include="Views\YoutubeVideos\Details.cshtml" />
     <Content Include="Views\YoutubeVideos\Edit.cshtml" />
     <Content Include="Views\YoutubeVideos\Index.cshtml" />
     <Content Include="Views\Publications\Opinion.cshtml" />

@@ -19,5 +19,11 @@ namespace PrensaEstudiantil.Models
         [Display(Name="Titulo")]
         [Required(ErrorMessage = "{0} campo obligatorio")]
         public string Name { get; set; }
+
+        [Display(Name = "Usuario")]
+        public string UserPublicationVideo { get; set; }
+
+        [Display(Name = "Usuario")]
+        public string UserPublicationVideoEdit { get; set; }
     }
 }
